@@ -17,7 +17,5 @@ for link in soup.find_all('a'):
         html_text2 = requests.get(href).text
         soup1=BeautifulSoup(html_text2,'lxml')
         Project_names.append(soup1.find('h2',class_='display1 m-3 p-3 text-center project-title').text)        
-        
-     
 print(Project_names)
  

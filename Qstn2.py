@@ -1,29 +1,23 @@
 import requests
-import urllib.request
 from bs4 import BeautifulSoup
-from inscriptis import get_text
-import numpy as np
-import pandas as pd 
-import nltk
-
-
-
 url = 'https://itc.gymkhana.iitb.ac.in/wncc/soc/'
-reqs = requests.get(url)
-soup = BeautifulSoup(reqs.text, 'html.parser')
-
-# list to store data from all HTML files
-data = []
-
+html_text= requests.get(url).text
+soup = BeautifulSoup(html_text, 'lxml')
+Project_names=[]
+Mentors=[]
+Mentees=[]
+Descriptions=[]
+Resources_Prereqs=[]
+i=0
 # loop through all URLs and extract data from each file
 for link in soup.find_all('a'):
     href = link.get('href')
     if href and href.endswith('.html'): # check if the link is to an HTML file
         href='https://itc.gymkhana.iitb.ac.in'+href
-        response = requests.get(href)
-
-        soup = BeautifulSoup(response.content, 'html.parser')
-        text = soup.get_text()
-        text1=str(text)
-        text1=text.replace(" ","")
-        print(text1)
+        html_text2 = requests.get(href).text
+        soup1=BeautifulSoup(html_text2,'lxml')
+        Project_names.append(soup1.find('h2',class_='display1 m-3 p-3 text-center project-title').text)        
+        
+     
+print(Project_names)
+ 

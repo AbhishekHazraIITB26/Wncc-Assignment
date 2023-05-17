@@ -4,10 +4,11 @@
 #include <unordered_set>
 using namespace std;
 
-bool hasMentor(unordered_map<string, vector<int>>& participants, const string& project, const string& rollNumber) {
+bool hasMentor(unordered_map<string, vector<int>>& participants, const string& project, const string& rollNumber,unordered_set<string>& joinedProjects) {
     vector<int>& currentSkills = participants[rollNumber];
     for (auto& participant : participants) {
         if (participant.first != rollNumber) {
+            if(joinedProjects.count(participant.first)==0){
             vector<int>& otherSkills = participant.second;
             if (otherSkills == currentSkills) {
                 if (participant.second > currentSkills) {
@@ -18,16 +19,18 @@ bool hasMentor(unordered_map<string, vector<int>>& participants, const string& p
     }
     return false;
 }
+}
+
 
 int main() {
-    unordered_map<int, vector<int>> participants;
-    unordered_set<int> joinedProjects; // To track projects already joined by a participant
+    unordered_map<string, vector<int>> participants;
+    unordered_set<string> joinedProjects; // To track projects already joined by a participant
     int N, M;
     cout << "Enter the number of participants: ";
     cin >> N;
     
     for (int i = 0; i < N; i++) {
-        int rollNumber;
+        string rollNumber;
         vector<int> skillLevels(5);
         cout << "Enter participant's roll number followed by skill levels (HTML, Python, DSA, Java, SQL): ";
         cin >> rollNumber;
@@ -59,7 +62,7 @@ int main() {
             bool skillFound = false;
             
             for (auto& participant : participants) {
-                int rollNumber = participant.first;
+                string rollNumber = participant.first;
                 // Skip participant if already joined a project
                 if (joinedProjects.count(rollNumber) > 0)
                     continue;
@@ -69,7 +72,7 @@ int main() {
                     joinedProjects.insert(rollNumber); // Mark participant as joined
                     break;
                 } else if (participant.second[j] == skillRequired - 1) {
-                    if (hasMentor(participants, projectName, rollNumber)) {
+                    if (hasMentor(participants, projectName, rollNumber,joinedProjects)) {
                         skillFound = true;
                         joinedProjects.insert(rollNumber); // Mark participant as joined
                         break;

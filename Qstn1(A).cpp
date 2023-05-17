@@ -4,12 +4,16 @@
 #include <unordered_set>
 using namespace std;
 
-bool hasMentor(unordered_map<int, vector<int>>& participants, const string& project, int rollNumber) {
+bool hasMentor(unordered_map<string, vector<int>>& participants, const string& project, const string& rollNumber) {
     vector<int>& currentSkills = participants[rollNumber];
     for (auto& participant : participants) {
-        if (participant.first != rollNumber && participant.second == currentSkills) {
-            if (participant.first == rollNumber)
-                return true;
+        if (participant.first != rollNumber) {
+            vector<int>& otherSkills = participant.second;
+            if (otherSkills == currentSkills) {
+                if (participant.second > currentSkills) {
+                    return true;
+                }
+            }
         }
     }
     return false;
